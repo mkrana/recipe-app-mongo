@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Recipe Details</title>
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.0/css/bootstrap.min.css}">
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="col-md-6">
+			<div class="card">
+				<div class="card-header">
+					<h3 class="float-start" th:text="${recipe.description}">Recipe Description</h3>
+					<a class="btn btn-primary float-end" th:href="@{'/recipe/'+${recipe.id}+'/imageform'}">Image
+						Upload</a>
+				</div>
+				<div class="card-body">
+					<div class="card-text">
+						<div class="row">
+							<div class="col-3">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<h5>Categories:</h5>
+							</div>
+							<div class="col-md-3">
+								<ul th:each="category:${recipe.categories}">
+									<li th:text=${category.description}>cat one</li>
+								</ul>
+							</div>
+							<div class="col-md-5">
+								<img th:src="@{'/recipe/'+${recipe.id}+'/renderimage'}" alt="" class="img-fluid">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<h5>Prep Time:</h5>
+							</div>
+							<div class="col-md-3">
+								<p th:text="${recipe.prepTime} + ' min'">30 min</p>
+							</div>
+							<div class="col-md-3">
+								<h5>Difficulty:</h5>
+							</div>
+							<div class="col-md-3">
+								<p th:text="${recipe.difficulty}">Easy</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<h5>Cooktime:</h5>
+							</div>
+							<div class="col-md-3">
+								<p th:text="${recipe.cookTime} + ' min'">30 min</p>
+							</div>
+							<div class="col-md-3">
+								<h5>Servings:</h5>
+							</div>
+							<div class="col-md-3">
+								<p th:text=${recipe.servings}>4</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<h5>Source:</h5>
+							</div>
+							<div class="col-md-3">
+								<p th:text="${recipe.source}">30 min</p>
+							</div>
+							<div class="col-md-3">
+								<h5>URL:</h5>
+							</div>
+							<div class="col-md-3">
+								<p th:text="${recipe.url}">http://www.example.com</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="card">
+				<div class="card-header">
+					<p class="float-start">Ingredients</p>
+					<a th:href="@{'/recipe/'+${recipe.id}+'/ingredients'}" class=" float-end btn btn-primary">View</a>
+				</div>
+				<div class="card-body">
+					<div class="card-text">
+						<ul th:each="ingredient: ${recipe.ingredients}">
+							<li
+								th:text="${ingredient.amount} +' '+ ${ingredient.unitOfMeasure.uom} +' '+ ${ingredient.description}">
+								Ingredient One</li>
+						</ul>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="card">
+				<div class="card-header">Directions</div>
+				<div class="card-body">
+					<p class="card-text" th:text="${recipe.directions}"></p>
+				</div>
+			</div>
+
+			<div class="card">
+				<div class="card-header">Notes</div>
+				<div class="card-body">
+					<p class="card-text" th:text="${recipe.note.recipeNotes}"></p>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/5.1.0/js/bootstrap.min.js}"></script>
+</body>

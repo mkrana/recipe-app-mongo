@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>New Recipe</title>
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.0/css/bootstrap.min.css}" />
+</head>
+
+<body>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h3>Create/Edit Recipe</h3>
+				<form th:object=${recipe} th:action="@{/recipe/save}" method="post" class="form-group">
+					<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+						<p>Please Correct Below Errors</p>
+					</div>
+					<div class="row form-group">
+						<div class="col-6">
+							<input type="hidden" th:field=*{id} />
+							<label for="recipeDescription" class="form-label">Recipe Description</label>
+							<input type="text" th:field="*{description}" class="form-control"
+								placeholder="Enter Recipe Description" />
+							<span th:if="${#fields.hasErrors('description')}">
+								<ul>
+									<li th:each="err:${#fields.errors('description')}" th:text="${err}"
+										class="alert alert-danger" />
+								</ul>
+							</span>
+						</div>
+					</div>
+
+					<div class="row form-group">
+						<div class="col-6">
+							<h5>Categories:</h5>
+							<div class="form-check">
+								<input type="checkbox" class="form-check-input" value="">
+								<label>Category 1</label>
+							</div>
+							<div class="form-check">
+								<input type="checkbox" class="form-check-input" value="">
+								<label>Category 2</label>
+							</div>
+						</div>
+					</div>
+					<div class="row form-group">
+						<div class="col-3">
+							<label for="prepTime">Prep Time</label>
+							<input type="number" id="prepTime" th:field=*{prepTime} class="form-control"
+								placeholder="Enter Prep Time" />
+							<span th:if="${#fields.hasErrors('prepTime')}">
+								<ul>
+									<li th:each="err:${#fields.errors('prepTime')}" th:text="${err}"
+										class="alert alert-danger"></li>
+
+								</ul>
+
+							</span>
+
+						</div>
+						<div class="col-3">
+							<label for="cookTime">Cook Time</label>
+							<input type="number" id="cookTime" th:field=*{cookTime} class="form-control"
+								placeholder="Enter Cooking Time" />
+						</div>
+					</div>
+					<div class="row form-group">
+						<div class="col-3 form-group">
+							<label for="difficultyDropdown" class="form">Difficulty:</label>
+							<select name="difficultyDropdown" class="form-control" th:field="*{difficulty}">
+								<option th:each="difficultyValue:${T(com.mkrana.recipe.domain.Difficulty).values()}"
+									th:text="${difficultyValue.name()}" th:value="${difficultyValue.name()}">Option 1
+								</option>
+							</select>
+						</div>
+					</div>
+					<div class="row form-group">
+						<div class="col-3">
+							<label for="serving" class="form-label">Serving:</label>
+							<input type="number" th:field="*{servings}" class="form-control"
+								placeholder="Number of people to be served" />
+						</div>
+						<div class="col-3">
+							<label for="source" class="form-label">Source:</label>
+							<input type="text" class="form-control" th:field="*{source}"
+								placeholder="Source of Recipe" />
+						</div>
+					</div>
+					<div class="row form-group">
+						<div class="col-3">
+							<label for="url" class="form-label">URL:</label>
+							<input type="text" class="form-control" th:field="*{url}"
+								placeholder="Web Link Of Recipe" />
+							<span th:if="${#fields.hasErrors('url')}">
+								<ul>
+									<li th:each="err:${#fields.errors('url')}" th:text="${err}"
+										class="alert alert-danger"></li>
+								</ul>
+							</span>
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-6">
+							<label for="directions" class="form-label">Directions</label>
+							<textarea class="form-control" id="directions" th:field="*{directions}"
+								placeholder="Steps to Cook the Recipe" />
+							<span th:if="${#fields.hasErrors('directions')}">
+								<ul>
+									<li th:each="err:${#fields.errors('directions')}" th:text="${err}"
+										class="alert alert-danger"></li>
+								</ul>
+							</span>
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-6">
+							<label for="recipeNotes" class="form-label">Recipe Notes</label>
+							<textarea class="form-control" id="recipeNotes" th:field="*{note.recipeNotes}" />
+						</div>
+					</div>
+					<div class="row form-group">
+						<div class="col-6">
+							<button class="btn btn-primary" type="submit" value="Submit">Submit</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/5.1.0/js/bootstrap.min.js}"></script>
+</body>
+
+</html>

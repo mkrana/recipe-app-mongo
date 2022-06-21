@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Edit Ingredient</title>
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.0/css/bootstrap.min.css}">
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-6">
+				<div class="card">
+					<div class="card-header">
+						<h3>Edit Ingredient</h3>
+					</div>
+					<div class="card-body">
+						<form th:object="${ingredient}" th:action="@{'/recipe/' + ${ingredient.recipeId} + '/ingredients/save'}">
+							<!-- Amount, Description, Uom, Hidden ID element for persistence - Don't forget to use form-control, form-group and bootstrap classes-->
+							<div class="row">
+                                <input type="hidden" th:field="*{id}">
+								<div class="col-3 form-group">
+									<!-- Amount field-->
+									<label for="ingredientAmount" class="form-label">Amount</label>
+									<input type="number" id="ingredientAmount" class="form-control"
+										th:field="*{amount}" />
+								</div>
+								<div class="col-3 form-group">
+									<!-- Amount field-->
+									<label for="ingredientDescription" class="form-label">Description</label>
+									<input type="text" id="ingredientDescription" class="form-control"
+										th:field="*{description}" />
+								</div>
+								<div class="col-3 form-group">
+									<!-- List of All Unit Of Measure-->
+									<label for="ingredientUom" class="form-label">Unit Of Measure</label>
+									<select name="unitOfMeasure.id" id="ingredientUom" class="form-control">
+										<option th:each="measure : ${unitOfMeasureList}"
+											th:selected="${measure.id.equals(ingredient.unitOfMeasure.id)}"
+											th:value="${measure.id}" 
+											th:text="${measure.uom}">BlahBlah</option>
+									</select>
+								</div>
+							</div>
+							<br>
+							<button type="submit" class="btn btn-primary">Submit</button>
+						</form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/5.1.0/js/bootstrap.min.js}"></script>
+</body>
+
+</html>
