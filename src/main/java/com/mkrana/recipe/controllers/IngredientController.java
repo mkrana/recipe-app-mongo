@@ -57,7 +57,7 @@ public class IngredientController {
 	@RequestMapping("/recipe/{recipeId}/ingredients/new")
 	public String newIngredient(@PathVariable String recipeId, Model model) {
 		// Check if recipe with the id exists
-		Recipe recipe = recipeService.findRecipeById(recipeId);
+		Recipe recipe = recipeService.findRecipeById(recipeId).block();
 		if (recipe == null) {
 			// Something has gone really wrong
 		}
@@ -73,7 +73,7 @@ public class IngredientController {
 	@PostMapping
 	@RequestMapping("/recipe/{recipeId}/ingredients/save")
 	public String saveOrUpdate(@ModelAttribute IngredientCommand ingredientCommand) {
-		IngredientCommand savedIngredientCommand = ingredientService.saveOrUpdateIngredient(ingredientCommand);
+		IngredientCommand savedIngredientCommand = ingredientService.saveOrUpdateIngredient(ingredientCommand).block();
 		return "redirect:/recipe/" + savedIngredientCommand.getRecipeId() + "/ingredients/"
 				+ savedIngredientCommand.getId() + "/show";
 

@@ -41,7 +41,7 @@ class RecipeServiceImplIntegrationTest {
 		recipeCommand.setDescription(DESCRIPTION);
 
 		// Test
-		RecipeCommand savedRecipeCommand = recipeService.saveRecipe(recipeCommand);
+		RecipeCommand savedRecipeCommand = recipeService.saveRecipe(recipeCommand).block();
 		assertEquals(savedRecipeCommand.getDescription(), savedRecipe.getDescription());
 		assertEquals(savedRecipeCommand.getIngredients().size(), savedRecipe.getIngredients().size());
 		assertEquals(savedRecipeCommand.getCategories().size(), savedRecipe.getCategories().size());

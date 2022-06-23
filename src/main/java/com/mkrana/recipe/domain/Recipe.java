@@ -4,20 +4,24 @@ package com.mkrana.recipe.domain;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @EqualsAndHashCode(exclude = { "ingredients" })
 @Document
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Recipe {
 
 	@Id
@@ -33,9 +37,7 @@ public class Recipe {
 	private Notes note;
 	private Set<Ingredient> ingredients = new HashSet<>();
 	private Difficulty difficulty;
-	
-	@DBRef
-	private Set<Category> categories =  new HashSet<>();
+	private Set<Category> categories = new HashSet<>();
 
 	public void setNote(Notes note) {
 		if (note != null) {

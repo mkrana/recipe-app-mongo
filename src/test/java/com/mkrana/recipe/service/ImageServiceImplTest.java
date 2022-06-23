@@ -19,6 +19,7 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import com.mkrana.recipe.domain.Recipe;
 import com.mkrana.recipe.repositories.RecipeRepository;
+import com.mkrana.recipe.service.impl.ImageServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 class ImageServiceImplTest {

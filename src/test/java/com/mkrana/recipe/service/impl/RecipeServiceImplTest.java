@@ -27,13 +27,16 @@ import com.mkrana.recipe.domain.Notes;
 import com.mkrana.recipe.domain.Recipe;
 import com.mkrana.recipe.exceptions.NotFoundException;
 import com.mkrana.recipe.repositories.RecipeRepository;
+import com.mkrana.recipe.repositories.reactive.RecipeReactiveRepository;
+
+import reactor.core.publisher.Mono;
 
 class RecipeServiceImplTest {
 
 	RecipeServiceImpl recipeService;
 
 	@Mock
-	RecipeRepository recipeRepository;
+	RecipeReactiveRepository recipeRepository;
 
 	@Mock
 	RecipeCommandToRecipe recipeCommandToRecipe;
@@ -76,8 +79,8 @@ class RecipeServiceImplTest {
 	void getRecipeByIdTest() {
 		Recipe recipe = new Recipe();
 		recipe.setId("1");
-		when(recipeRepository.findById(anyString())).thenReturn(Optional.of(recipe));
-		Recipe recipeReturned = recipeService.findRecipeById("1");
+		when(recipeRepository.findById(anyString())).thenReturn(Mono.just(recipe));
+		Recipe recipeReturned = recipeService.findRecipeById("1").block();
 		assertNotNull(recipeReturned);
 		verify(recipeRepository, times(1)).findById(anyString());
 		verify(recipeRepository, never()).findAll();

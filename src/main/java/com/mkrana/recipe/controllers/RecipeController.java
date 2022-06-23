@@ -56,13 +56,13 @@ public class RecipeController {
 			result.getAllErrors().forEach(error -> log.error(error.toString()));
 			return RECIPEFORM;
 		}
-		RecipeCommand savedEntity = recipeService.saveRecipe(recipeCommand);
+		RecipeCommand savedEntity = recipeService.saveRecipe(recipeCommand).block();
 		return "redirect:/recipe/" + savedEntity.getId() + "/show";
 	}
 
 	@GetMapping("/recipe/{id}/update")
 	public String updateRecipe(@PathVariable String id, Model model) {
-		RecipeCommand savedRecipe = recipeService.findRecipeCommandById(id);
+		RecipeCommand savedRecipe = recipeService.findRecipeCommandById(id).block();
 		model.addAttribute(RECIPE, savedRecipe);
 		return RECIPEFORM;
 

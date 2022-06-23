@@ -2,8 +2,10 @@ package com.mkrana.recipe.service;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import reactor.core.publisher.Mono;
+
 public interface ImageService {
 
-	public void saveImage(String recipeId, MultipartFile multipartFile);
+	public Mono<Void> saveImage(String recipeId, MultipartFile multipartFile);
 
 }

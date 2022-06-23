@@ -25,6 +25,8 @@ import com.mkrana.recipe.domain.Recipe;
 import com.mkrana.recipe.exceptions.NotFoundException;
 import com.mkrana.recipe.service.RecipeService;
 
+import reactor.core.publisher.Mono;
+
 @ExtendWith(MockitoExtension.class)
 class RecipeControllerTest {
 
@@ -46,7 +48,7 @@ class RecipeControllerTest {
 	void testGetRecipeById() throws Exception {
 		Recipe recipe = new Recipe();
 		recipe.setId("1");
-		when(recipeService.findRecipeById(anyString())).thenReturn(recipe);
+		when(recipeService.findRecipeById(anyString())).thenReturn(Mono.just(recipe));
 		controller.perform(get("/recipe/1/show")).andExpect(status().isOk()).andExpect(view().name("recipe/show"))
 				.andExpect(model().attributeExists("recipe"));
 	}
@@ -62,7 +64,7 @@ class RecipeControllerTest {
 	void testSaveRecipeForm() throws Exception {
 		RecipeCommand recipeCommand = new RecipeCommand();
 		recipeCommand.setId("2");
-		when(recipeService.saveRecipe(any())).thenReturn(recipeCommand);
+		when(recipeService.saveRecipe(any())).thenReturn(Mono.just(recipeCommand));
 		// All the fields need to be specified to satisfy constraints of RecipeCommand
 		controller
 				.perform(post("/recipe/save").accept(MediaType.APPLICATION_FORM_URLENCODED).param("id", "2")
@@ -74,7 +76,7 @@ class RecipeControllerTest {
 
 	@Test
 	void testUpdateRecipe() throws Exception {
-		when(recipeService.findRecipeCommandById(any())).thenReturn(new RecipeCommand());
+		when(recipeService.findRecipeCommandById(any())).thenReturn(Mono.just(new RecipeCommand()));
 		controller.perform(get("/recipe/1/update")).andExpect(status().is(200))
 				.andExpect(view().name("recipe/newrecipe")).andExpect(model().attributeExists("recipe"));
 

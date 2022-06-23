@@ -34,7 +34,7 @@ public class ImageController {
 
 	@GetMapping("recipe/{recipeId}/imageform")
 	public String loadImageUploadForm(@PathVariable String recipeId, Model model) {
-		Recipe formRecipe = recipeService.findRecipeById(recipeId);
+		Recipe formRecipe = recipeService.findRecipeById(recipeId).block();
 		model.addAttribute("recipe", formRecipe);
 		return "recipe/imageform";
 	}
@@ -47,7 +47,7 @@ public class ImageController {
 
 	@GetMapping("/recipe/{recipeId}/renderimage")
 	public void renderImageFromDB(@PathVariable String recipeId, HttpServletResponse response) throws IOException {
-		RecipeCommand recipeCommand = recipeService.findRecipeCommandById(recipeId);
+		RecipeCommand recipeCommand = recipeService.findRecipeCommandById(recipeId).block();
 		// Convert Primitive array to Boxed array
 		if (recipeCommand.getImage() != null) {
 			byte[] byteImageArray = new byte[recipeCommand.getImage().length];

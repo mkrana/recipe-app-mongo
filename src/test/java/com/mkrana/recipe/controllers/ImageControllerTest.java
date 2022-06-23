@@ -22,8 +22,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.mkrana.recipe.command.RecipeCommand;
 import com.mkrana.recipe.domain.Recipe;
-import com.mkrana.recipe.service.ImageServiceImpl;
+import com.mkrana.recipe.service.impl.ImageServiceImpl;
 import com.mkrana.recipe.service.impl.RecipeServiceImpl;
+
+import reactor.core.publisher.Mono;
 
 @ExtendWith(MockitoExtension.class)
 class ImageControllerTest {
@@ -53,7 +55,7 @@ class ImageControllerTest {
 	void testFileUploadForm() throws Exception {
 		Recipe recipe = new Recipe();
 		recipe.setId(ID);
-		when(recipeService.findRecipeById(ID)).thenReturn(recipe);
+		when(recipeService.findRecipeById(ID)).thenReturn(Mono.just(recipe));
 		imageControllerMvc.perform(get("/recipe/" + ID + "/imageform")).andExpect(status().isOk())
 				.andExpect(view().name("recipe/imageform")).andExpect((model().attributeExists("recipe")));
 
@@ -84,7 +86,7 @@ class ImageControllerTest {
 		}
 		recipe.setImage(boxedByteArray);
 
-		when(recipeService.findRecipeCommandById(ID)).thenReturn(recipe);
+		when(recipeService.findRecipeCommandById(ID)).thenReturn(Mono.just(recipe));
 
 		MockHttpServletResponse httpServletResponse = imageControllerMvc.perform(get("/recipe/1/renderimage"))
 				.andExpect(status().isOk()).andReturn().getResponse();

@@ -1,3 +1,4 @@
+
 package com.mkrana.recipe.bootloader;
 
 import java.math.BigDecimal;
@@ -5,6 +6,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -18,12 +20,15 @@ import com.mkrana.recipe.domain.UnitOfMeasure;
 import com.mkrana.recipe.repositories.CategoryRepository;
 import com.mkrana.recipe.repositories.RecipeRepository;
 import com.mkrana.recipe.repositories.UnitOfMeasureRepository;
+import com.mkrana.recipe.repositories.reactive.CategoryReactiveRepository;
+import com.mkrana.recipe.repositories.reactive.RecipeReactiveRepository;
+import com.mkrana.recipe.repositories.reactive.UnitOfMeasureReactiveRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
-public class H2DbInitializer implements ApplicationRunner {
+public class DbInitializer implements ApplicationRunner {
 
 	private final CategoryRepository categoryRepository;
 
@@ -31,7 +36,16 @@ public class H2DbInitializer implements ApplicationRunner {
 
 	private final RecipeRepository recipeRepository;
 
-	public H2DbInitializer(CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository,
+	@Autowired
+	UnitOfMeasureReactiveRepository reactiveUnitOfMeasureRepository;
+
+	@Autowired
+	RecipeReactiveRepository recipeReactiveRepository;
+
+	@Autowired
+	CategoryReactiveRepository categoryReactiveRepository;
+
+	public DbInitializer(CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository,
 			RecipeRepository recipeRepository) {
 		this.categoryRepository = categoryRepository;
 		this.unitOfMeasureRepository = unitOfMeasureRepository;
@@ -156,13 +170,17 @@ public class H2DbInitializer implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		//Initial Data Load, To be run only once for persistent DB
+		// Initial Data Load, To be run only once for persistent DB
 		if (unitOfMeasureRepository.count() < 1) {
 			loadCategories();
 			loadUnitOfMeasure();
 			populateBananaBreadRecipe();
 			prepareBakedOatmealRecipe();
 		}
+		log.error("Count of Unit Of Measure:" + reactiveUnitOfMeasureRepository.count().block().toString());
+		log.error("Count of Recipe:" + recipeReactiveRepository.count().block().toString());
+		log.error("Count of Categories:" + categoryReactiveRepository.count().block().toString());
+
 	}
 
 }

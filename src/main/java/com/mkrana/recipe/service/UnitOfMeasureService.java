@@ -1,11 +1,11 @@
 package com.mkrana.recipe.service;
 
-import java.util.Set;
-
 import com.mkrana.recipe.command.UnitOfMeasureCommand;
+
+import reactor.core.publisher.Flux;
 
 public interface UnitOfMeasureService {
 	
-	public Set<UnitOfMeasureCommand> allUnitOfMeasure();
+	public Flux<UnitOfMeasureCommand> allUnitOfMeasure();
 
 }

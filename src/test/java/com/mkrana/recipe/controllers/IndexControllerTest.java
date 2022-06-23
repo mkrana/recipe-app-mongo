@@ -27,6 +27,8 @@ import org.springframework.ui.Model;
 import com.mkrana.recipe.domain.Recipe;
 import com.mkrana.recipe.service.RecipeService;
 
+import reactor.core.publisher.Flux;
+
 @ExtendWith(MockitoExtension.class)
 class IndexControllerTest {
 
@@ -49,12 +51,9 @@ class IndexControllerTest {
 		Recipe recipe = new Recipe();
 		Recipe secondRecipe = new Recipe();
 		secondRecipe.setId("2");
-		List<Recipe> recipes = new ArrayList<>();
-		recipes.add(recipe);
-		recipes.add(secondRecipe);
-
 		// when
-		when(recipeService.getAllRecipes()).thenReturn(recipes);
+		when(recipeService.getAllRecipes())
+				.thenReturn(Flux.just(Recipe.builder().id("1").build(), Recipe.builder().id("2").build()));
 
 		assertEquals("index", indexController.getIndexPage(model));
 		verify(recipeService, times(1)).getAllRecipes();

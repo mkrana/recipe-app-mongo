@@ -1,4 +1,4 @@
-package com.mkrana.recipe.service;
+package com.mkrana.recipe.service.impl;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -8,23 +8,26 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mkrana.recipe.domain.Recipe;
 import com.mkrana.recipe.repositories.RecipeRepository;
+import com.mkrana.recipe.repositories.reactive.RecipeReactiveRepository;
+import com.mkrana.recipe.service.ImageService;
 
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
 public class ImageServiceImpl implements ImageService {
 
-	RecipeRepository recipeRepositoy;
+	RecipeReactiveRepository recipeRepositoy;
 
-	public ImageServiceImpl(RecipeRepository recipeRepositoy) {
+	public ImageServiceImpl(RecipeReactiveRepository recipeRepositoy) {
 		this.recipeRepositoy = recipeRepositoy;
 	}
 
 	@Override
-	public void saveImage(String recipeId, MultipartFile multipartFile) {
+	public Mono<Void> saveImage(String recipeId, MultipartFile multipartFile) {
 		try {
-			Optional<Recipe> savedEntity = recipeRepositoy.findById(recipeId);
+			Optional<Recipe> savedEntity = recipeRepositoy.findById(recipeId).blockOptional();
 			if (savedEntity.isPresent()) {
 				Recipe savedRecipe = savedEntity.get();
 				Byte[] imageByteArray = new Byte[multipartFile.getBytes().length];
@@ -33,15 +36,16 @@ public class ImageServiceImpl implements ImageService {
 					imageByteArray[i++] = b;
 				}
 				savedRecipe.setImage(imageByteArray);
-				recipeRepositoy.save(savedRecipe);
+				recipeRepositoy.save(savedRecipe).block();
 				log.info("File Recieved");
 			} else {
-				// TODO Throw an exception. This has to be a universal
 				log.error("Recipe Not Found");
 			}
+
 		} catch (IOException e) {
 			log.error("Shit went south" + e.getMessage());
 		}
+		return Mono.empty();
 	}
 
 }

@@ -1,10 +1,7 @@
 package com.mkrana.recipe.domain;
 
 import java.math.BigDecimal;
-
-import javax.persistence.Id;
-
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import java.util.UUID;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,12 +14,9 @@ import lombok.Setter;
 @EqualsAndHashCode(exclude = { "recipe" })
 public class Ingredient {
 
-	@Id
-	private String id;
+	private String id = UUID.randomUUID().toString();
 	private String description;
 	private BigDecimal amount;
-	
-	@DBRef
 	private UnitOfMeasure unitOfMeasure;
 	private Recipe recipe;
 

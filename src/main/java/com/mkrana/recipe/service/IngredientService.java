@@ -2,13 +2,15 @@ package com.mkrana.recipe.service;
 
 import com.mkrana.recipe.command.IngredientCommand;
 
+import reactor.core.publisher.Mono;
+
 public interface IngredientService {
 	
-	IngredientCommand findByRecipeIdAndIngredientId(String recipeId, String ingredientId);
+	Mono<IngredientCommand> findByRecipeIdAndIngredientId(String recipeId, String ingredientId);
 	
-	IngredientCommand saveOrUpdateIngredient(IngredientCommand ingredientCommand);
+	Mono<IngredientCommand> saveOrUpdateIngredient(IngredientCommand ingredientCommand);
 	
-	void deleteIngredient(String recipeId, String ingredientId);
+	Mono<Void> deleteIngredient(String recipeId, String ingredientId);
 	
 
 }

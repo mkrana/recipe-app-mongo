@@ -1,7 +1,6 @@
 package com.mkrana.recipe.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -26,6 +25,8 @@ import com.mkrana.recipe.domain.Recipe;
 import com.mkrana.recipe.service.IngredientService;
 import com.mkrana.recipe.service.RecipeService;
 import com.mkrana.recipe.service.UnitOfMeasureService;
+
+import reactor.core.publisher.Mono;
 
 @ExtendWith(MockitoExtension.class)
 class IngredientControllerTest {
@@ -54,7 +55,7 @@ class IngredientControllerTest {
 
 	@Test
 	void testListIngredients() throws Exception {
-		when(recipeService.findRecipeCommandById(anyString())).thenReturn(new RecipeCommand());
+		when(recipeService.findRecipeCommandById(anyString())).thenReturn(Mono.just(new RecipeCommand()));
 		ingredientMvc.perform(get("/recipe/1/ingredients")).andExpect(status().isOk())
 				.andExpect(view().name("recipe/ingredient/ingredientlist"))
 				.andExpect(model().attributeExists("recipe"));
@@ -63,7 +64,7 @@ class IngredientControllerTest {
 	@Test
 	void testViewIngredient() throws Exception {
 		when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString()))
-				.thenReturn(new IngredientCommand());
+				.thenReturn(Mono.just(new IngredientCommand()));
 		ingredientMvc.perform(get("/recipe/1/ingredients/1/show")).andExpect(status().isOk())
 				.andExpect(view().name("recipe/ingredient/show")).andExpect(model().attributeExists("ingredient"));
 	}
@@ -71,7 +72,7 @@ class IngredientControllerTest {
 	@Test
 	void testUpdateIngredientForm() throws Exception {
 		when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString()))
-				.thenReturn(new IngredientCommand());
+				.thenReturn(Mono.just(new IngredientCommand()));
 		ingredientMvc.perform(get("/recipe/1/ingredients/2/update")).andExpect(status().isOk())
 				.andExpect(view().name("recipe/ingredient/ingredientform"))
 				.andExpect(model().attributeExists("ingredient"))
@@ -83,7 +84,7 @@ class IngredientControllerTest {
 		IngredientCommand ingredientCommand = new IngredientCommand();
 		ingredientCommand.setId(ID);
 		ingredientCommand.setRecipeId(ID_2);
-		when(ingredientService.saveOrUpdateIngredient(any())).thenReturn(ingredientCommand);
+		when(ingredientService.saveOrUpdateIngredient(any())).thenReturn(Mono.just(ingredientCommand));
 
 		ingredientMvc
 				.perform(post("/recipe/1/ingredients/save").contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -95,7 +96,7 @@ class IngredientControllerTest {
 	void testNewIngredientForm() throws Exception {
 		Recipe recipe = new Recipe();
 		recipe.setId(ID);
-		when(recipeService.findRecipeById(ID)).thenReturn(recipe);
+		when(recipeService.findRecipeById(ID)).thenReturn(Mono.just(recipe));
 		ingredientMvc.perform(get("/recipe/1/ingredients/new")).andExpect(status().isOk())
 				.andExpect(view().name("recipe/ingredient/ingredientform"))
 				.andExpect(model().attributeExists("unitOfMeasureList"))
