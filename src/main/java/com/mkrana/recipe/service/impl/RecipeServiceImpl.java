@@ -15,10 +15,12 @@ import com.mkrana.recipe.exceptions.NotFoundException;
 import com.mkrana.recipe.repositories.reactive.RecipeReactiveRepository;
 import com.mkrana.recipe.service.RecipeService;
 
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
+@Slf4j
 public class RecipeServiceImpl implements RecipeService {
 
 	private final RecipeReactiveRepository recipeRepository;

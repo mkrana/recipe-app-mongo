@@ -3,6 +3,8 @@ package com.mkrana.recipe.domain;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +14,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = { "recipe" })
+@Builder
+@AllArgsConstructor
 public class Ingredient {
 
 	private String id = UUID.randomUUID().toString();

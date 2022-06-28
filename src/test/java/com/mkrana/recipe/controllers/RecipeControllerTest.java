@@ -95,13 +95,7 @@ class RecipeControllerTest {
 		controller.perform(get("/recipe/1/show")).andExpect(status().isNotFound())
 				.andExpect(view().name("404notfound"));
 	}
-
-	@Test
-	void incorrectUrlParameter() throws Exception {
-		controller.perform(get("/recipe/s/show")).andExpect(status().isBadRequest())
-				.andExpect(view().name("400badrequest"));
-	}
-
+	
 	@Test
 	void testNewValidationFail() throws Exception {
 		RecipeCommand recipeCommand = new RecipeCommand();

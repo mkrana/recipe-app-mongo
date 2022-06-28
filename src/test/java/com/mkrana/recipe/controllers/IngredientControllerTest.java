@@ -21,11 +21,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.mkrana.recipe.command.IngredientCommand;
 import com.mkrana.recipe.command.RecipeCommand;
+import com.mkrana.recipe.command.UnitOfMeasureCommand;
 import com.mkrana.recipe.domain.Recipe;
 import com.mkrana.recipe.service.IngredientService;
 import com.mkrana.recipe.service.RecipeService;
 import com.mkrana.recipe.service.UnitOfMeasureService;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @ExtendWith(MockitoExtension.class)
@@ -73,6 +75,9 @@ class IngredientControllerTest {
 	void testUpdateIngredientForm() throws Exception {
 		when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString()))
 				.thenReturn(Mono.just(new IngredientCommand()));
+		when(unitOfMeasureService.allUnitOfMeasure())
+				.thenReturn(Flux.just(UnitOfMeasureCommand.builder().uom("Large").build(),
+						UnitOfMeasureCommand.builder().uom("Cup").build()));
 		ingredientMvc.perform(get("/recipe/1/ingredients/2/update")).andExpect(status().isOk())
 				.andExpect(view().name("recipe/ingredient/ingredientform"))
 				.andExpect(model().attributeExists("ingredient"))
@@ -97,6 +102,9 @@ class IngredientControllerTest {
 		Recipe recipe = new Recipe();
 		recipe.setId(ID);
 		when(recipeService.findRecipeById(ID)).thenReturn(Mono.just(recipe));
+		when(unitOfMeasureService.allUnitOfMeasure())
+				.thenReturn(Flux.just(UnitOfMeasureCommand.builder().uom("Large").build(),
+						UnitOfMeasureCommand.builder().uom("Cup").build()));
 		ingredientMvc.perform(get("/recipe/1/ingredients/new")).andExpect(status().isOk())
 				.andExpect(view().name("recipe/ingredient/ingredientform"))
 				.andExpect(model().attributeExists("unitOfMeasureList"))
@@ -111,9 +119,4 @@ class IngredientControllerTest {
 		verify(ingredientService).deleteIngredient(anyString(), anyString());
 	}
 
-	@Test
-	void testIncorrectURLParameter() throws Exception {
-		ingredientMvc.perform(get("/recipe/a/ingredients/b/delete")).andExpect(status().isBadRequest())
-				.andExpect(view().name("400badrequest"));
-	}
 }

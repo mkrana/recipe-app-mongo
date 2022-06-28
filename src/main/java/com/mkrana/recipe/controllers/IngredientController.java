@@ -17,6 +17,8 @@ import com.mkrana.recipe.service.UnitOfMeasureService;
 
 @Controller
 public class IngredientController {
+	
+	private static final String INGREDIENT = "ingredient";
 
 	RecipeService recipeService;
 
@@ -40,15 +42,15 @@ public class IngredientController {
 
 	@RequestMapping("/recipe/{recipeId}/ingredients/{ingredientId}/show")
 	public String showIngredient(@PathVariable String recipeId, @PathVariable String ingredientId, Model model) {
-		model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId));
+		model.addAttribute(INGREDIENT, ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId));
 		return "recipe/ingredient/show";
 	}
 
 	@GetMapping
 	@RequestMapping("/recipe/{recipeId}/ingredients/{ingredientId}/update")
 	public String loadIngredientForm(@PathVariable String recipeId, @PathVariable String ingredientId, Model model) {
-		model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId));
-		model.addAttribute("unitOfMeasureList", unitOfMeasureService.allUnitOfMeasure());
+		model.addAttribute(INGREDIENT, ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId));
+		model.addAttribute("unitOfMeasureList", unitOfMeasureService.allUnitOfMeasure().collectList().block());
 		return "recipe/ingredient/ingredientform";
 
 	}
@@ -64,8 +66,8 @@ public class IngredientController {
 		IngredientCommand ingredientCommand = new IngredientCommand();
 		ingredientCommand.setUnitOfMeasure(new UnitOfMeasureCommand());
 		ingredientCommand.setRecipeId(recipe.getId());
-		model.addAttribute("ingredient", ingredientCommand);
-		model.addAttribute("unitOfMeasureList", unitOfMeasureService.allUnitOfMeasure());
+		model.addAttribute(INGREDIENT, ingredientCommand);
+		model.addAttribute("unitOfMeasureList", unitOfMeasureService.allUnitOfMeasure().collectList().block());
 
 		return "recipe/ingredient/ingredientform";
 	}

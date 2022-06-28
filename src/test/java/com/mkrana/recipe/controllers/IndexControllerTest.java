@@ -42,25 +42,22 @@ class IndexControllerTest {
 	Model model;
 
 	@Captor
-	ArgumentCaptor<List<Recipe>> argumentRecipeCaptor;
+	ArgumentCaptor<Flux<Recipe>> argumentRecipeCaptor;
 
 	@Test
 	void testGetIndexPage() {
-
-		// given
-		Recipe recipe = new Recipe();
-		Recipe secondRecipe = new Recipe();
-		secondRecipe.setId("2");
-		// when
 		when(recipeService.getAllRecipes())
-				.thenReturn(Flux.just(Recipe.builder().id("1").build(), Recipe.builder().id("2").build()));
+				.thenReturn(
+						Flux.just(Recipe.builder().id("1").build()
+						, Recipe.builder().id("2").build()));
 
 		assertEquals("index", indexController.getIndexPage(model));
 		verify(recipeService, times(1)).getAllRecipes();
 		verify(model, times(1)).addAttribute(eq("recipes"), argumentRecipeCaptor.capture());
-
+		
 		// Argument Captor
-		assertEquals(2, argumentRecipeCaptor.getValue().size());
+		assertEquals(2, argumentRecipeCaptor.getValue().collectList().block().size());
+
 	}
 
 	@Test

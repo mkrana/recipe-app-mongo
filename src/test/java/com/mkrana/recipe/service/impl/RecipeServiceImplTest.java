@@ -3,16 +3,11 @@ package com.mkrana.recipe.service.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +21,6 @@ import com.mkrana.recipe.converter.RecipeToRecipeCommand;
 import com.mkrana.recipe.domain.Notes;
 import com.mkrana.recipe.domain.Recipe;
 import com.mkrana.recipe.exceptions.NotFoundException;
-import com.mkrana.recipe.repositories.RecipeRepository;
 import com.mkrana.recipe.repositories.reactive.RecipeReactiveRepository;
 
 import reactor.core.publisher.Mono;
@@ -92,11 +86,6 @@ class RecipeServiceImplTest {
 		recipeService.deleteRecipeById("1");
 		verify(recipeRepository, times(1)).deleteById(anyString());
 
-	}
-
-	@Test
-	void getRecipeByIdNotFound() throws Exception {
-		assertThrows(NotFoundException.class, () -> recipeService.findRecipeById("3"));
 	}
 
 }

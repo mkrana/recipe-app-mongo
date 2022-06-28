@@ -2,29 +2,31 @@ package com.mkrana.recipe.repositories;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import com.mkrana.recipe.domain.Category;
+import com.mkrana.recipe.repositories.reactive.CategoryReactiveRepository;
 
-@DataJpaTest
+@SpringBootTest
+@TestPropertySource(properties = "spring.mongodb.embedded.version=3.5.5")
 class CategoryRepositoryTest {
 
 	@Autowired
-	CategoryRepository categoryRepository;
+	CategoryReactiveRepository categoryRepository;
 
 	@BeforeEach
 	void setUp() throws Exception {
+		 
 	}
 
 	@Test
 	void findByDescriptionTest() {
-		Optional<Category> category = categoryRepository.findByDescription("American");
-		assertEquals("American", category.get().getDescription());
+		Category category = categoryRepository.findByDescription("Banana").block();
+		assertEquals("Banana", category.getDescription());
 	}
 
 }
